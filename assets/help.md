@@ -21,7 +21,7 @@
 > `UNOFFICIAL`: Website ChatGPT
 
 :star: **ALORA'S CREATIONS** 
-- `/draw-alora [prompt]` Generate an image with Alora's model
+- `/alora-draw [prompt]` Generate an image with Alora's model
 
 For complete base documentation, please visit the amazing:
 https://github.com/Zero6992/chatGPT-discord-bot
