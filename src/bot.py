@@ -87,8 +87,8 @@ def run_discord_bot():
         app_commands.Choice(name="Ofiicial GPT-4.0", value="OFFICIAL-GPT4"),
         app_commands.Choice(name="Website ChatGPT-3.5", value="UNOFFICIAL"),
         app_commands.Choice(name="Website ChatGPT-4.0", value="UNOFFICIAL-GPT4"),
-        app_commands.Choice(name="Bard", value="Bard"),
-        app_commands.Choice(name="Bing", value="Bing"),
+        # app_commands.Choice(name="Bard", value="Bard"),
+        # app_commands.Choice(name="Bing", value="Bing"),
     ])
 
     async def chat_model(interaction: discord.Interaction, choices: app_commands.Choice[str]):

@@ -16,11 +16,9 @@
   - There is currently no channel specified as a replyAll channel, probably won't work.
 - `/reset` Clear ChatGPT conversation history
 - `/chat-model` Switch different chat model
-  - Note that Bard and Bing are available as options, but not configured.
+  - Note that Bard and Bing are available in template, but not in the bot.
 > `OFFICIAL`: GPT-3.5 model
 > `UNOFFICIAL`: Website ChatGPT
-> ~~`Bard`: Google Bard model~~
-> ~~`Bing`: Microsoft Bing model~~
 
 :star: **ALORA'S CREATIONS** 
 - `/draw-alora [prompt]` Generate an image with Alora's model
