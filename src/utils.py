@@ -12,3 +12,9 @@ def open_file(relative_path: str, mode: str = 'r') -> str:
         return f"The file '{absolute_path}' does not exist."
     except Exception as e:
         return f"An error occurred: {str(e)}"
+
+# use example:
+# this should be relative to root directory
+# help_doc_location = r"assets/help.md"
+# help_message = utils.open_file(help_doc_location)
+# print(help_message)

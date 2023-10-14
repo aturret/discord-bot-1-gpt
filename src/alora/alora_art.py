@@ -1,59 +1,49 @@
 import os
 import json
+import requests
 
-import openai
-from pathlib import Path
 from base64 import b64decode
 from dotenv import load_dotenv
 from asgiref.sync import sync_to_async
+from src import utils
 
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+lora_api_url = os.getenv("LORA_API_URL")
 
+# so that subsequent writes don't crash to missing directory
+from pathlib import Path
+IMAGE_DIR = Path.cwd() / "images"
+IMAGE_DIR.mkdir(parents=True, exist_ok=True)
 
-# generate 512x512 image and save to a file
-# return the path of the image as a str
-async def draw(prompt, amount) -> list[str]:
-    DATA_DIR = Path.cwd()
-    DATA_DIR.mkdir(exist_ok=True)
+async def draw(prompt: str) -> list[str]:
+    payload = {
+        "username": "sacabam_bot",
+        "image": "none",
+        "features": "txt2img",
+        "style": "anime",
+        "prompt": prompt,
+        "param": {}
+    }
 
-    response = await sync_to_async(openai.Image.create)(
-        prompt=prompt,
-        n=amount,
-        size="1024x1024",
-        response_format="b64_json",
+    # Make the POST request
+    response = await sync_to_async(requests.post)(
+        lora_api_url,
+        json=payload
     )
-    with open("response.log", mode="w", encoding="utf-8") as file:
-        json.dump(response, file)
 
-    file_name = DATA_DIR / f"{prompt[:5]}-{response['created']}.json"
+    image_b64str = response.json()['result_image']
+    decoded_image_data = b64decode(image_b64str)
 
-    with open(file_name, mode="w", encoding="utf-8") as file:
-        json.dump(response, file)
+    rel_path = r"images/lora_image_test.png"
+    abs_path = utils.get_absolute_path(rel_path)
+    with open(abs_path, "wb") as f:
+        f.write(decoded_image_data)
 
-    path = await convert(file_name)
-    path = [str(p) for p in path]
-    return path
+    return [abs_path]
 
-# code stolen from https://realpython.com/generate-images-with-dalle-openai-api/
-async def convert(path):
-    DATA_DIR = Path.cwd() / "responses"
-    JSON_FILE = DATA_DIR / path
-    IMAGE_DIR = Path.cwd() / "images"
-    IMAGE_DIR.mkdir(parents=True, exist_ok=True)
 
-    with open(JSON_FILE, mode="r", encoding="utf-8") as file:
-        response = json.load(file)
-    image_files = []
-    for index, image_dict in enumerate(response["data"]):
-        image_data = b64decode(image_dict["b64_json"])
-        image_file = IMAGE_DIR / f"{JSON_FILE.stem}-{index}.png"
-        image_files.append(image_file)
-
-        with open(image_file, mode="wb") as png:
-            png.write(image_data)
-
-        # delete uneeded json file
-    os.remove(path)
-
-    return image_files
+if __name__ == "__main__":
+    import asyncio
+    async def main():
+        await draw("cirno")
+    asyncio.run(main())

@@ -4,6 +4,9 @@ images/
 config.json
 cookies.json
 
+# sandbox stuff
+test.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -166,5 +169,3 @@ cython_debug/
 .idea/
 Pipfile*
 
-# sandbox stuff
-test.py

@@ -22,6 +22,8 @@
 
 :star: **ALORA'S CREATIONS** 
 - `/alora-draw [prompt]` Generate an image with Alora's model
+  - currently only anime images model
+  - new models coming soon...
 
 For complete base documentation, please visit the amazing:
 https://github.com/Zero6992/chatGPT-discord-bot

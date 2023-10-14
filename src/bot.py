@@ -227,20 +227,8 @@ gpt-engine: {chat_engine_status}
             logger.exception(f"Error while generating image: {e}")
 
 
-    @client.tree.command(name="draw-alora", description="Generate an image with aloraAI's model")
-    @app_commands.choices(amount=[
-        app_commands.Choice(name="1", value=1),
-        app_commands.Choice(name="2", value=2),
-        app_commands.Choice(name="3", value=3),
-        app_commands.Choice(name="4", value=4),
-        app_commands.Choice(name="5", value=5),
-        app_commands.Choice(name="6", value=6),
-        app_commands.Choice(name="7", value=7),
-        app_commands.Choice(name="8", value=8),
-        app_commands.Choice(name="9", value=9),
-        app_commands.Choice(name="10", value=10),
-    ])
-    async def draw(interaction: discord.Interaction, *, prompt: str, amount: int = 1):
+    @client.tree.command(name="alora-draw", description="Generate an image with aloraAI's model")
+    async def draw_alora(interaction: discord.Interaction, *, prompt: str):
         if interaction.user == client.user:
             return
 
@@ -251,9 +239,9 @@ gpt-engine: {chat_engine_status}
 
         await interaction.response.defer(thinking=True, ephemeral=client.isPrivate)
         try:
-            path = await alora_art.draw(prompt, amount)
+            paths = await alora_art.draw(prompt)
             files = []
-            for idx, img in enumerate(path):
+            for idx, img in enumerate(paths):
                 files.append(discord.File(img, filename=f"image{idx}.png"))
             title = f'> **{prompt}** - {str(interaction.user.mention)} \n\n'
 
