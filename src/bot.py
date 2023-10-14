@@ -150,8 +150,7 @@ def run_discord_bot():
     @client.tree.command(name="help", description="Show help for the bot")
     async def help(interaction: discord.Interaction):
         # this should be relative to root directory
-        # use \\ for separators!
-        help_doc_location = 'assets\\help.md'
+        help_doc_location = r"assets/help.md"
         help_message = utils.open_file(help_doc_location)
             
         await interaction.response.defer(ephemeral=False)
