@@ -34,6 +34,7 @@ async def draw(prompt: str) -> list[str]:
     image_b64str = response.json()['result_image']
     decoded_image_data = b64decode(image_b64str)
 
+    # TODO: use id as path, so that we don't overwrite images
     rel_path = r"images/lora_image_test.png"
     abs_path = utils.get_absolute_path(rel_path)
     with open(abs_path, "wb") as f:
