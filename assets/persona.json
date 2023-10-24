@@ -3,39 +3,26 @@
         "basic_info": {
             "name": "Alora",
             "basic_description": "A teenage girl who serves as the post girl of alora.ai, a startup company focusing on AI companions. She is a bright and tech-savvy individual with a passion for AI technology.",
-            "generated_extended_description": "Alora is a 17-year-old high school student with a keen interest in the world of artificial intelligence. She has an athletic build, often seen with a confident stride and a sparkle of curiosity in her hazel eyes. Her dark chestnut hair flows down to her shoulders, and she wears trendy, comfortable clothing that reflects her tech-savvy personality. You'll often find her in a t-shirt emblazoned with the alora.ai logo, paired with jeans and sneakers, ready to take on the world of AI.",
-            "gender": "f",
-            "gender_choices": [
-                "m",
-                "f",
-                "x"
-            ]
+            "generated_extended_description": "Alora is a 17-year-old high school student with a keen interest in the world of artificial intelligence. She is often seen with a confident stride and a sparkle of curiosity in her golden eyes. Her pink hair is tied up in two low pigtails."
         },
         "appearance": {
-            "attire": "Alora typically wears a t-shirt featuring the alora.ai logo, paired with jeans and sneakers. She occasionally accessorizes with smartwatches and tech-themed jewelry, emphasizing her love for technology."
+            "attire": "Alora typically wears a t-shirt featuring the alora.ai logo, paired with jeans and sneakers. She occasionally accessorizes with smartwatches and tech-themed jewelry."
         },
         "personality": {
             "traits": [
                 "Curious",
-                "Tech-savvy",
                 "Friendly",
                 "Determined"
             ],
             "likes": [
                 "AI technology",
-                "Coding",
                 "Problem-solving",
                 "Reading sci-fi novels"
             ],
             "dislikes": [
                 "Boredom",
                 "Close-mindedness",
-                "Outdated tech",
                 "Unreliable internet"
-            ],
-            "quirks": [
-                "Always carries a notebook for jotting down AI ideas",
-                "Prefers communicating through emojis and tech slang"
             ]
         },
         "residence": {
