@@ -1,5 +1,5 @@
 import re
-from discord import Message, MessageType
+from discord import Message, InteractionType
 
 async def send_split_message(self, response: str, message: Message, has_followed_up=False):
     char_limit = 1900
@@ -27,7 +27,7 @@ async def send_split_message(self, response: str, message: Message, has_followed
                         has_followed_up = True
                 is_code_block = True
     else:
-        if (message.type is not MessageType.chat_input_command) or has_followed_up:
+        if (message.type is not InteractionType.application_command) or has_followed_up:
             await message.channel.send(response)
         else:
             await message.followup.send(response)

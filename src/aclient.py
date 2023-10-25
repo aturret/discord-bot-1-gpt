@@ -105,7 +105,7 @@ class aclient(discord.Client):
             await asyncio.sleep(1)
 
     async def enqueue_message(self, message, user_message):
-        await message.response.defer(ephemeral=self.isPrivate) if message.type is discord.MessageType.chat_input_command else None
+        await message.response.defer(ephemeral=self.isPrivate) if message.type is discord.InteractionType.application_command else None
         await self.message_queue.put((message, user_message))
 
     # FIXME how to identify if it's from slash command or not
