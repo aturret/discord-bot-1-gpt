@@ -110,21 +110,17 @@ class aclient(discord.Client):
 
     # FIXME how to identify if it's from slash command or not
     async def send_message(self, message, user_message):
-        # if message.guild:
-        #     if user_message.type == discord.MessageType.chat_input_command:
-        #         author = message.user.id
-        #     else:
-        #         author = message.author.id
-        #     response = (f'> **{user_message}** - <@{str(author)}> \n\n')
-        # else:
-        #     response = ""
-        response = ""
+        if type(message) is discord.Interaction:
+            author = message.user.id
+            response = (f'> **{user_message}** - <@{str(author)}> \n\n')
+        else:
+            response = ""
         try:
             if self.chat_model == "OFFICIAL":
                 response = f"{response}{await responses.official_handle_response(user_message, self)}"
-                if message.guild:
+                if message.guild: # slash or mention
                     await send_split_message(self, response, message)
-                else:
+                else: # dm
                     await self.current_channel.send(response)
         except Exception as e:
             logger.exception(f"Error while sending : {e}")
