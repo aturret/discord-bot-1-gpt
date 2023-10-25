@@ -3,8 +3,6 @@
 - `/draw [prompt]` Generate an image with the Dalle2 model
 - `/private` ChatGPT switch to private mode
 - `/public` ChatGPT switch to public mode
-- `/replyall` ChatGPT switch between replyAll mode and default mode
-  - There is currently no channel specified as a replyAll channel, probably won't work.
 - `/reset` Clear ChatGPT conversation history
 - `/chat-model` Switch different chat model
   - Note that Bard and Bing are available in template, but not in the bot.

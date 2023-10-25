@@ -19,15 +19,8 @@ def run_discord_bot():
         loop.create_task(client.process_messages())
         logger.info(f'{client.user} is now running!')
 
-
     @client.tree.command(name="chat", description="Have a chat with ChatGPT")
     async def chat(interaction: discord.Interaction, *, message: str):
-        if client.is_replying_all == "True":
-            await interaction.response.defer(ephemeral=False)
-            await interaction.followup.send(
-                "> **WARN: You already on replyAll mode. If you want to use the Slash Command, switch to normal mode by using `/replyall` again**")
-            logger.warning("\x1b[31mYou already on replyAll mode, can't use slash command!\x1b[0m")
-            return
         if interaction.user == client.user:
             return
         username = str(interaction.user)
@@ -36,7 +29,6 @@ def run_discord_bot():
             f"\x1b[31m{username}\x1b[0m : /chat [{message}] in ({client.current_channel})")
 
         await client.enqueue_message(interaction, message)
-
 
     @client.tree.command(name="private", description="Toggle private access")
     async def private(interaction: discord.Interaction):
@@ -51,7 +43,6 @@ def run_discord_bot():
             await interaction.followup.send(
                 "> **WARN: You already on private mode. If you want to switch to public mode, use `/public`**")
 
-
     @client.tree.command(name="public", description="Toggle public access")
     async def public(interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=False)
@@ -65,33 +56,16 @@ def run_discord_bot():
                 "> **WARN: You already on public mode. If you want to switch to private mode, use `/private`**")
             logger.info("You already on public mode!")
 
-
-    @client.tree.command(name="replyall", description="Toggle replyAll access")
-    async def replyall(interaction: discord.Interaction):
-        client.replying_all_discord_channel_id = str(interaction.channel_id)
-        await interaction.response.defer(ephemeral=False)
-        if client.is_replying_all == "True":
-            client.is_replying_all = "False"
-            await interaction.followup.send(
-                "> **INFO: Next, the bot will response to the Slash Command. If you want to switch back to replyAll mode, use `/replyAll` again**")
-            logger.warning("\x1b[31mSwitch to normal mode\x1b[0m")
-        elif client.is_replying_all == "False":
-            client.is_replying_all = "True"
-            await interaction.followup.send(
-                "> **INFO: Next, the bot will disable Slash Command and responding to all message in this channel only. If you want to switch back to normal mode, use `/replyAll` again**")
-            logger.warning("\x1b[31mSwitch to replyAll mode\x1b[0m")
-
-
     @client.tree.command(name="chat-model", description="Switch different chat model")
     @app_commands.choices(choices=[
         app_commands.Choice(name="Official GPT-3.5", value="OFFICIAL"),
         app_commands.Choice(name="Ofiicial GPT-4.0", value="OFFICIAL-GPT4"),
         app_commands.Choice(name="Website ChatGPT-3.5", value="UNOFFICIAL"),
-        app_commands.Choice(name="Website ChatGPT-4.0", value="UNOFFICIAL-GPT4"),
+        app_commands.Choice(name="Website ChatGPT-4.0",
+                            value="UNOFFICIAL-GPT4"),
         # app_commands.Choice(name="Bard", value="Bard"),
         # app_commands.Choice(name="Bing", value="Bing"),
     ])
-
     async def chat_model(interaction: discord.Interaction, choices: app_commands.Choice[str]):
         await interaction.response.defer(ephemeral=False)
         original_chat_model = client.chat_model
@@ -119,15 +93,16 @@ def run_discord_bot():
 
             client.chatbot = client.get_chatbot_model()
             await interaction.followup.send(f"> **INFO: You are now in {client.chat_model} model.**\n")
-            logger.warning(f"\x1b[31mSwitch to {client.chat_model} model\x1b[0m")
+            logger.warning(
+                f"\x1b[31mSwitch to {client.chat_model} model\x1b[0m")
 
         except Exception as e:
             client.chat_model = original_chat_model
             client.openAI_gpt_engine = original_openAI_gpt_engine
             client.chatbot = client.get_chatbot_model()
             await interaction.followup.send(f"> **ERROR: Error while switching to the {choices.value} model, check that you've filled in the related fields in `.env`.**\n")
-            logger.exception(f"Error while switching to the {choices.value} model: {e}")
-
+            logger.exception(
+                f"Error while switching to the {choices.value} model: {e}")
 
     @client.tree.command(name="reset", description="Complete reset conversation history")
     async def reset(interaction: discord.Interaction):
@@ -147,19 +122,17 @@ def run_discord_bot():
         logger.warning(
             f"\x1b[31m{client.chat_model} bot has been successfully reset\x1b[0m")
 
-
     @client.tree.command(name="help", description="Show help for the bot")
     async def help(interaction: discord.Interaction):
         # this should be relative to root directory
         help_doc_location = r"assets/help.md"
         help_message = utils.open_file(help_doc_location)
-            
+
         await interaction.response.defer(ephemeral=False)
         await interaction.followup.send(help_message)
 
         logger.info(
             "\x1b[31mSomeone needs help!\x1b[0m")
-
 
     @client.tree.command(name="info", description="Bot information")
     async def info(interaction: discord.Interaction):
@@ -181,7 +154,6 @@ chat-model: {chat_model_status}
 gpt-engine: {chat_engine_status}
 ```
 """)
-
 
     @client.tree.command(name="draw", description="Generate an image with the Dalle2 model")
     @app_commands.choices(amount=[
@@ -219,13 +191,12 @@ gpt-engine: {chat_engine_status}
             await interaction.followup.send(
                 "> **ERROR: Inappropriate request 😿**")
             logger.info(
-            f"\x1b[31m{username}\x1b[0m made an inappropriate request.!")
+                f"\x1b[31m{username}\x1b[0m made an inappropriate request.!")
 
         except Exception as e:
             await interaction.followup.send(
                 "> **ERROR: Something went wrong 😿**")
             logger.exception(f"Error while generating image: {e}")
-
 
     @client.tree.command(name="alora-draw", description="Generate an image with aloraAI's model")
     async def draw_alora(interaction: discord.Interaction, *, prompt: str):
@@ -252,24 +223,31 @@ gpt-engine: {chat_engine_status}
                 "> **ERROR: Something went wrong 😿**")
             logger.exception(f"Error while generating image: {e}")
 
-
-
     @client.event
     async def on_message(message):
-        if client.is_replying_all == "True":
+        if message.type is discord.MessageType.chat_input_command:
+            return
+        # reply to mentions in servers or DMs
+        is_dm = not message.guild
+        if is_dm or (client.user in message.mentions): 
+            # ignore if the bot is the author
             if message.author == client.user:
                 return
-            if client.replying_all_discord_channel_id:
-                if message.channel.id == int(client.replying_all_discord_channel_id):
-                    username = str(message.author)
-                    user_message = str(message.content)
-                    client.current_channel = message.channel
-                    logger.info(f"\x1b[31m{username}\x1b[0m : '{user_message}' ({client.current_channel})")
-
-                    await client.enqueue_message(message, user_message)
             else:
-                logger.exception("replying_all_discord_channel_id not found, please use the command `/replyall` again.")
+                username = str(message.author)
+                user_message = str(message.content)
+                client.current_channel = message.channel
+                if (not message.guild):
+                    logger.info(
+                        f"\x1b[31m{username}\x1b[0m : direct message [{message}] in ({client.current_channel})")
+                else:
+                    if message.reference:
+                        replied_message = await message.channel.fetch_message(message.reference.message_id)
+                        user_message = f"{user_message}\n[this message is a reply to]{str(replied_message.content)}"
+                    logger.info(
+                        f"\x1b[31m{username}\x1b[0m : bot mentioned [{message}] in ({client.current_channel})")
 
+                await client.enqueue_message(message, user_message)
     TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 
     client.run(TOKEN)
