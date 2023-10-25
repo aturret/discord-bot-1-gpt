@@ -225,15 +225,27 @@ gpt-engine: {chat_engine_status}
 
     @client.event
     async def on_message(message):
-        if not message.guild:
+        if message.type is discord.MessageType.chat_input_command:
+            return
+        # reply to mentions in servers or DMs
+        is_dm = not message.guild
+        if is_dm or (client.user in message.mentions): 
+            # ignore if the bot is the author
             if message.author == client.user:
                 return
             else:
                 username = str(message.author)
                 user_message = str(message.content)
                 client.current_channel = message.channel
-                logger.info(
-                    f"\x1b[31m{username}\x1b[0m : direct message [{message}] in ({client.current_channel})")
+                if (not message.guild):
+                    logger.info(
+                        f"\x1b[31m{username}\x1b[0m : direct message [{message}] in ({client.current_channel})")
+                else:
+                    if message.reference:
+                        replied_message = await message.channel.fetch_message(message.reference.message_id)
+                        user_message = f"{user_message}\n[this message is a reply to]{str(replied_message.content)}"
+                    logger.info(
+                        f"\x1b[31m{username}\x1b[0m : bot mentioned [{message}] in ({client.current_channel})")
 
                 await client.enqueue_message(message, user_message)
     TOKEN = os.getenv("DISCORD_BOT_TOKEN")

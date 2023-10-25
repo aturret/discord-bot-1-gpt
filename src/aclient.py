@@ -105,16 +105,20 @@ class aclient(discord.Client):
             await asyncio.sleep(1)
 
     async def enqueue_message(self, message, user_message):
-        await message.response.defer(ephemeral=self.isPrivate) if message.guild else None
+        await message.response.defer(ephemeral=self.isPrivate) if message.type is discord.MessageType.chat_input_command else None
         await self.message_queue.put((message, user_message))
 
+    # FIXME how to identify if it's from slash command or not
     async def send_message(self, message, user_message):
-        if message.guild:
-            author = message.author.id
-            response = (f'> **{user_message}** - <@{str(author)}> \n\n')
-        else:
-            response = ""
-
+        # if message.guild:
+        #     if user_message.type == discord.MessageType.chat_input_command:
+        #         author = message.user.id
+        #     else:
+        #         author = message.author.id
+        #     response = (f'> **{user_message}** - <@{str(author)}> \n\n')
+        # else:
+        #     response = ""
+        response = ""
         try:
             if self.chat_model == "OFFICIAL":
                 response = f"{response}{await responses.official_handle_response(user_message, self)}"
